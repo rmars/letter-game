@@ -12,35 +12,32 @@ ctx.font = "30px Comic Sans MS";
 ctx.fillStyle = "red";
 ctx.textAlign = "center";
 
+const cWidth = canvas.width;
+const cHeight = canvas.height;
 const widthUnit = canvas.width / 4;
 const heightUnit = canvas.height / 4;
 
+const topMargin = cHeight / 8;
+const sideMargin = cWidth / 8;
+
 // top
 for (l in letters[0]) {
-  ctx.fillText(letters[0][l], widthUnit + l * widthUnit, canvas.height / 8);
+  ctx.fillText(letters[0][l], widthUnit + l * widthUnit, topMargin);
 }
 
 // right
 for (l in letters[1]) {
-  ctx.fillText(
-    letters[1][l],
-    canvas.width - canvas.width / 8,
-    heightUnit + l * heightUnit
-  );
+  ctx.fillText(letters[1][l], cWidth - sideMargin, heightUnit + l * heightUnit);
 }
 
 // bottom
 for (l in letters[2]) {
-  ctx.fillText(
-    letters[2][l],
-    widthUnit + l * widthUnit,
-    canvas.height - canvas.height / 8
-  );
+  ctx.fillText(letters[2][l], widthUnit + l * widthUnit, cHeight - topMargin);
 }
 
 // left
 for (l in letters[3]) {
-  ctx.fillText(letters[3][l], canvas.width / 8, heightUnit + l * heightUnit);
+  ctx.fillText(letters[3][l], sideMargin, heightUnit + l * heightUnit);
 }
 
 let clicks = 0;
@@ -64,6 +61,7 @@ const drawLine = ({ fromX, fromY, toX, toY }) => {
 const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
+  console.log(x, y);
   if (clicks % 2 == 0) {
     line.toX = x;
     line.toY = y;
