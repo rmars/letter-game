@@ -1,4 +1,5 @@
 const canvas = document.getElementById("myCanvas");
+const undoBtn = document.getElementById("undo");
 const ctx = canvas.getContext("2d");
 
 const letters = [
@@ -9,7 +10,7 @@ const letters = [
 ];
 
 ctx.font = "30px Comic Sans MS";
-ctx.fillStyle = "red";
+ctx.fillStyle = "#28a745";
 ctx.textAlign = "center";
 
 const cWidth = canvas.width;
@@ -48,14 +49,16 @@ const line = {
   toY: null,
 };
 
+const linesDrawn = [];
 const drawLine = ({ fromX, fromY, toX, toY }) => {
-  // Start a new Path
   ctx.beginPath();
   ctx.moveTo(fromX, fromY);
   ctx.lineTo(toX, toY);
-
-  // Draw the Path
   ctx.stroke();
+};
+
+const eraseLastLineDrawn = () => {
+  ctx.clearRect(topMargin, sideMargin, cHeight - topMargin, cWidth - topMargin);
 };
 
 const handleCanvasClick = e => {
@@ -65,11 +68,18 @@ const handleCanvasClick = e => {
   if (clicks % 2 == 0) {
     line.toX = x;
     line.toY = y;
+
     drawLine(line);
+    linesDrawn.push(line);
   } else {
     line.fromX = x;
     line.fromY = y;
   }
 };
 
+const handleUndoBtnClick = () => {
+  console.log("clicked");
+};
+
 canvas.addEventListener("click", handleCanvasClick, false);
+undoBtn.addEventListener("click", handleUndoBtnClick, false);
