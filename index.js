@@ -65,9 +65,30 @@ const drawLine = ({ fromX, fromY, toX, toY }) => {
   ctx.stroke();
 };
 
+const determineLetterClicked = (x, y) => {
+  // console.log("d:", x, y);
+  if (x < widthUnit) {
+    console.log("first col");
+  }
+  if (x > 3 * widthUnit) {
+    console.log("last col");
+  }
+
+  if (y < heightUnit) {
+    console.log("first row");
+  }
+
+  if (y > 3 * heightUnit) {
+    console.log("last row");
+  }
+};
+
 const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
+
+  const letterClicked = determineLetterClicked(x, y);
+
   if (clicks % 2 == 0) {
     line.toX = x;
     line.toY = y;
@@ -84,7 +105,7 @@ const handleCanvasClick = e => {
   } else {
     line.fromX = x;
     line.fromY = y;
-    drawCircle(x, y, "yellow");
+    drawCircle(x, y, "red");
   }
 };
 
