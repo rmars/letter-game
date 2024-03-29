@@ -3,10 +3,10 @@ const undoBtn = document.getElementById("undo");
 const ctx = canvas.getContext("2d");
 
 const puzzle = [
-  ["A", "B", "C"], // top
-  ["D", "E", "F"], // right
-  ["G", "H", "I"], // bottom
-  ["J", "K", "L"], // left
+  ["A", "B", "C"], // top (first row)
+  ["D", "E", "F"], // right (last col)
+  ["G", "H", "I"], // bottom (last row)
+  ["J", "K", "L"], // left (first col)
 ];
 
 ctx.font = "30px Comic Sans MS";
@@ -20,7 +20,7 @@ const cHeight = canvas.height;
 
 const midX = canvas.width / 2;
 const midY = canvas.height / 2;
-const padding = 50;
+const padding = 60;
 
 const widthUnit = canvas.width / 4;
 const heightUnit = canvas.height / 4;
@@ -73,21 +73,49 @@ const drawLine = ({ fromX, fromY, toX, toY }) => {
 };
 
 const determineLetterClicked = (x, y) => {
-  // console.log("d:", x, y);
-  if (x < widthUnit) {
-    console.log("first col");
-  }
-  if (x > 3 * widthUnit) {
-    console.log("last col");
-  }
+  const determineYClick = letterOptions => {
+    const midYBoundaryHi = cHeight / 2 + padding / 2;
+    const midYBoundaryLow = cHeight / 2 - padding / 2;
 
+    if (y < midYBoundaryLow) {
+      return letterOptions[0];
+    } else if (y > midYBoundaryHi) {
+      return letterOptions[2];
+    } else {
+      return letterOptions[1];
+    }
+  };
+
+  const determineXClick = letterOptions => {
+    const midXBoundaryHi = cWidth / 2 + padding / 2;
+    const midXBoundaryLow = cWidth / 2 - padding / 2;
+    if (x < midXBoundaryLow) {
+      return letterOptions[0];
+    } else if (x > midXBoundaryHi) {
+      return letterOptions[2];
+    } else {
+      return letterOptions[1];
+    }
+  };
+
+  // first column
+  if (x < sideMargin + padding / 2) {
+    return determineYClick(puzzle[3]);
+  }
+  // last column
+  if (x > cWidth - (sideMargin + padding / 2)) {
+    return determineYClick(puzzle[1]);
+  }
+  // first row
   if (y < heightUnit) {
-    console.log("first row");
+    return determineXClick(puzzle[0]);
+  }
+  // last row
+  if (y > 3 * heightUnit) {
+    return determineXClick(puzzle[2]);
   }
 
-  if (y > 3 * heightUnit) {
-    console.log("last row");
-  }
+  return null;
 };
 
 const handleCanvasClick = e => {
@@ -95,6 +123,7 @@ const handleCanvasClick = e => {
   const [x, y] = [e.offsetX, e.offsetY];
 
   const letterClicked = determineLetterClicked(x, y);
+  console.log(letterClicked);
 
   if (clicks % 2 == 0) {
     line.toX = x;
