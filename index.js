@@ -17,6 +17,11 @@ const endpointRadius = 4;
 
 const cWidth = canvas.width;
 const cHeight = canvas.height;
+
+const midX = canvas.width / 2;
+const midY = canvas.height / 2;
+const padding = 50;
+
 const widthUnit = canvas.width / 4;
 const heightUnit = canvas.height / 4;
 
@@ -25,25 +30,27 @@ const sideMargin = cWidth / 8;
 
 const drawLetters = letters => {
   // top
-  for (l in letters[0]) {
-    ctx.fillText(letters[0][l], widthUnit + l * widthUnit, topMargin);
-  }
+  const topRowY = topMargin;
+  ctx.fillText(letters[0][0], midX - padding, topRowY);
+  ctx.fillText(letters[0][1], midX, topRowY);
+  ctx.fillText(letters[0][2], midX + padding, topRowY);
+
   // right
-  for (l in letters[1]) {
-    ctx.fillText(
-      letters[1][l],
-      cWidth - sideMargin,
-      heightUnit + l * heightUnit
-    );
-  }
+  const rightColX = cWidth - sideMargin;
+  ctx.fillText(letters[1][0], rightColX, midY - padding);
+  ctx.fillText(letters[1][1], rightColX, midY);
+  ctx.fillText(letters[1][2], rightColX, midY + padding);
+
   // bottom
-  for (l in letters[2]) {
-    ctx.fillText(letters[2][l], widthUnit + l * widthUnit, cHeight - topMargin);
-  }
+  const bottomRowY = cHeight - topMargin;
+  ctx.fillText(letters[2][0], midX - padding, bottomRowY);
+  ctx.fillText(letters[2][1], midX, bottomRowY);
+  ctx.fillText(letters[2][2], midX + padding, bottomRowY);
   // left
-  for (l in letters[3]) {
-    ctx.fillText(letters[3][l], sideMargin, heightUnit + l * heightUnit);
-  }
+  const leftColX = sideMargin;
+  ctx.fillText(letters[3][0], leftColX, midY - padding);
+  ctx.fillText(letters[3][1], leftColX, midY);
+  ctx.fillText(letters[3][2], leftColX, midY + padding);
 };
 
 drawLetters(puzzle);
