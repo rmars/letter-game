@@ -12,7 +12,7 @@
   </head>
   <body>
     <div id="container" class="d-flex flex-column align-items-center">
-      <div style="min-height: 25px" id="currentWord"></div>
+      <div style="min-height: 25px" id="currentWord">Make some words!</div>
       <div>
         <canvas
           id="myCanvas"
@@ -21,8 +21,15 @@
           style="border: 1px solid #d3d3d3; background: #ffffff"></canvas>
       </div>
 
-      <div>
-        <button id="undo" type="button" class="btn btn-warning">Undo</button>
+      <div class="d-flex flex-row">
+        <div>
+          <button id="undo" type="button" class="btn btn-warning">Undo</button>
+        </div>
+        <div>
+          <button id="word" type="button" class="btn btn-success">
+            WORD?!
+          </button>
+        </div>
       </div>
     </div>
   </body>

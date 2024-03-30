@@ -1,7 +1,10 @@
 const canvas = document.getElementById("myCanvas");
 const undoBtn = document.getElementById("undo");
+const wordBtn = document.getElementById("word");
 const currWordContainer = document.getElementById("currentWord");
 const ctx = canvas.getContext("2d");
+
+const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
 const puzzle = [
   ["A", "B", "C"], // top (first row)
@@ -12,6 +15,7 @@ const puzzle = [
 
 ctx.font = "30px Comic Sans MS";
 ctx.fillStyle = "#28a745";
+ctx.fillStyle = genColorWithOpacity(1);
 ctx.textAlign = "center";
 
 const endpointRadius = 4;
@@ -120,6 +124,7 @@ const determineLetterClicked = (x, y) => {
 };
 
 let currentWord = "";
+let previousWords = [];
 const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
@@ -127,7 +132,10 @@ const handleCanvasClick = e => {
   const letterClicked = determineLetterClicked(x, y);
   if (letterClicked !== null) {
     currentWord = currentWord + letterClicked;
-    currWordContainer.innerText = currentWord;
+    console.log(currentWord);
+    currWordContainer.innerText = `${previousWords.join(" ")} ${
+      currentWord.length > 0 ? currentWord : "???"
+    }`;
   }
 
   if (clicks % 2 == 0) {
@@ -164,5 +172,12 @@ const handleUndoBtnClick = () => {
   linesDrawn.forEach(drawLine); // redraw line
 };
 
+const handleWordBtnClick = () => {
+  console.log(currentWord);
+  previousWords.push(currentWord);
+  currentWord = "";
+};
+
 canvas.addEventListener("click", handleCanvasClick, false);
 undoBtn.addEventListener("click", handleUndoBtnClick, false);
+wordBtn.addEventListener("click", handleWordBtnClick, false);
