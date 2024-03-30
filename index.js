@@ -6,6 +6,9 @@ const ctx = canvas.getContext("2d");
 
 const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
+const completedLineDotColor = "green";
+const startLineDotColor = "red";
+
 const puzzle = [
   ["A", "B", "C"], // top (first row)
   ["D", "E", "F"], // right (last col)
@@ -14,7 +17,6 @@ const puzzle = [
 ];
 
 ctx.font = "30px Comic Sans MS";
-ctx.fillStyle = "#28a745";
 ctx.fillStyle = genColorWithOpacity(1);
 ctx.textAlign = "center";
 
@@ -75,6 +77,9 @@ const drawLine = ({ fromX, fromY, toX, toY }) => {
   ctx.moveTo(fromX, fromY);
   ctx.lineTo(toX, toY);
   ctx.stroke();
+
+  drawCircle(fromX, fromY, completedLineDotColor);
+  drawCircle(toX, toY, completedLineDotColor);
 };
 
 const determineLetterClicked = (x, y) => {
@@ -144,7 +149,6 @@ const handleCanvasClick = e => {
     line.toY = y;
 
     drawLine(line);
-    drawCircle(x, y, "green");
     // if I don't re-assign here, it pushes the original line over and over
     linesDrawn.push({
       fromX: line.fromX,
@@ -155,7 +159,7 @@ const handleCanvasClick = e => {
   } else {
     line.fromX = x;
     line.fromY = y;
-    drawCircle(x, y, "red");
+    drawCircle(x, y, startLineDotColor);
   }
 };
 
