@@ -6,6 +6,9 @@ const ctx = canvas.getContext("2d");
 
 const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
+const defaultLetterColor = genColorWithOpacity(1);
+// const usedLetterColor = genColorWithOpacity(0.5);
+const usedLetterColor = "red";
 const completedLineDotColor = "green";
 const startLineDotColor = "red";
 
@@ -17,7 +20,7 @@ const puzzle = [
 ];
 
 ctx.font = "30px Comic Sans MS";
-ctx.fillStyle = genColorWithOpacity(1);
+ctx.fillStyle = defaultLetterColor;
 ctx.textAlign = "center";
 
 const endpointRadius = 4;
@@ -35,29 +38,46 @@ const heightUnit = canvas.height / 4;
 const topMargin = cHeight / 8;
 const sideMargin = cWidth / 8;
 
+let currentWord = "";
+let previousWords = [];
+
+const drawLetter = (letter, x, y, usedLetters) => {
+  if (usedLetters[letter]) {
+    ctx.fillStyle = usedLetterColor;
+  }
+
+  ctx.fillText(letter, x, y);
+  ctx.fillStyle = defaultLetterColor;
+};
+
 const drawLetters = letters => {
+  const usedLetters = {};
+  previousWords.forEach(wrd =>
+    wrd.split("").forEach(l => (usedLetters[l] = true))
+  );
+
   // top
   const topRowY = topMargin;
-  ctx.fillText(letters[0][0], midX - padding, topRowY);
-  ctx.fillText(letters[0][1], midX, topRowY);
-  ctx.fillText(letters[0][2], midX + padding, topRowY);
+  drawLetter(letters[0][0], midX - padding, topRowY, usedLetters);
+  drawLetter(letters[0][1], midX, topRowY, usedLetters);
+  drawLetter(letters[0][2], midX + padding, topRowY, usedLetters);
 
   // right
   const rightColX = cWidth - sideMargin;
-  ctx.fillText(letters[1][0], rightColX, midY - padding);
-  ctx.fillText(letters[1][1], rightColX, midY);
-  ctx.fillText(letters[1][2], rightColX, midY + padding);
+  drawLetter(letters[1][0], rightColX, midY - padding, usedLetters);
+  drawLetter(letters[1][1], rightColX, midY, usedLetters);
+  drawLetter(letters[1][2], rightColX, midY + padding, usedLetters);
 
   // bottom
   const bottomRowY = cHeight - topMargin;
-  ctx.fillText(letters[2][0], midX - padding, bottomRowY);
-  ctx.fillText(letters[2][1], midX, bottomRowY);
-  ctx.fillText(letters[2][2], midX + padding, bottomRowY);
+  drawLetter(letters[2][0], midX - padding, bottomRowY, usedLetters);
+  drawLetter(letters[2][1], midX, bottomRowY, usedLetters);
+  drawLetter(letters[2][2], midX + padding, bottomRowY, usedLetters);
   // left
   const leftColX = sideMargin;
-  ctx.fillText(letters[3][0], leftColX, midY - padding);
-  ctx.fillText(letters[3][1], leftColX, midY);
-  ctx.fillText(letters[3][2], leftColX, midY + padding);
+  drawLetter(letters[3][0], leftColX, midY - padding, usedLetters);
+  drawLetter(letters[3][1], leftColX, midY, usedLetters);
+  drawLetter(letters[3][2], leftColX, midY + padding, usedLetters);
 };
 
 drawLetters(puzzle);
@@ -130,8 +150,6 @@ const renderWords = (prev, curr) => {
   currWordContainer.innerText = `${prev.join(" ")} ${curr}`;
 };
 
-let currentWord = "";
-let previousWords = [];
 const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
@@ -190,8 +208,14 @@ const handleUndoBtnClick = () => {
 };
 
 const handleWordBtnClick = () => {
+  if (currentWord.length === 0) {
+    return;
+  }
   previousWords.push(currentWord);
-  currentWord = "";
+  currentWord = currentWord[currentWord.length - 1];
+
+  renderWords(previousWords, currentWord); // wow, I miss react
+  drawLetters(puzzle); // redraw letters
 };
 
 canvas.addEventListener("click", handleCanvasClick, false);
