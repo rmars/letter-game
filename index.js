@@ -1,5 +1,6 @@
 const canvas = document.getElementById("myCanvas");
 const undoBtn = document.getElementById("undo");
+const currWordContainer = document.getElementById("currentWord");
 const ctx = canvas.getContext("2d");
 
 const puzzle = [
@@ -118,12 +119,16 @@ const determineLetterClicked = (x, y) => {
   return null;
 };
 
+let currentWord = "";
 const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
 
   const letterClicked = determineLetterClicked(x, y);
-  console.log(letterClicked);
+  if (letterClicked !== null) {
+    currentWord = currentWord + letterClicked;
+    currWordContainer.innerText = currentWord;
+  }
 
   if (clicks % 2 == 0) {
     line.toX = x;
