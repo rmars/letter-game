@@ -63,12 +63,10 @@ const drawLetters = letters => {
 drawLetters(puzzle);
 
 let clicks = 0;
-const line = {
-  fromX: null,
-  fromY: null,
-  toX: null,
-  toY: null,
-};
+let fromX,
+  fromY,
+  toX,
+  toY = null;
 
 let linesDrawn = [];
 
@@ -146,22 +144,18 @@ const handleCanvasClick = e => {
   currentWord = currentWord + letterClicked;
   renderWords(previousWords, currentWord);
 
-  if (clicks % 2 == 0) {
-    line.toX = x;
-    line.toY = y;
-
-    drawLine(line);
-    // if I don't re-assign here, it pushes the original line over and over
-    linesDrawn.push({
-      fromX: line.fromX,
-      fromY: line.fromY,
-      toX: line.toX,
-      toY: line.toY,
-    });
-  } else {
-    line.fromX = x;
-    line.fromY = y;
+  if (fromX === null || fromY === null) {
+    fromX = x;
+    fromY = y;
     drawCircle(x, y, startLineDotColor);
+  } else {
+    toX = x;
+    toY = y;
+    drawLine({ fromX, fromY, toX, toY });
+    linesDrawn.push({ fromX, fromY, toX, toY });
+    // set this as the new start point
+    fromX = toX;
+    fromY = toY;
   }
 };
 
@@ -176,17 +170,23 @@ const handleUndoBtnClick = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
   linesDrawn.pop();
   drawLetters(puzzle); // redraw letters
-  linesDrawn.forEach(drawLine); // redraw line
+  linesDrawn.forEach(drawLine); // redraw lines
 
-  // undo the current word
+  // re-set the start point of the current line
+  if (linesDrawn.length > 0) {
+    const lastLine = linesDrawn[linesDrawn.length - 1];
+    fromX = lastLine.toX;
+    fromY = lastLine.toY;
+  }
+
+  // undo the current word in the display
   if (currentWord === "") {
     if (previousWords.length > 0) {
       currentWord = previousWords.pop();
     }
   }
   currentWord = currentWord.substring(0, currentWord.length - 1);
-
-  renderWords(previousWords, currentWord);
+  renderWords(previousWords, currentWord); // wow, I miss react
 };
 
 const handleWordBtnClick = () => {
