@@ -139,10 +139,12 @@ const handleCanvasClick = e => {
   const [x, y] = [e.offsetX, e.offsetY];
 
   const letterClicked = determineLetterClicked(x, y);
-  if (letterClicked !== null) {
-    currentWord = currentWord + letterClicked;
-    renderWords(previousWords, currentWord);
+  if (letterClicked === null) {
+    return;
   }
+
+  currentWord = currentWord + letterClicked;
+  renderWords(previousWords, currentWord);
 
   if (clicks % 2 == 0) {
     line.toX = x;
