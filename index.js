@@ -123,6 +123,10 @@ const determineLetterClicked = (x, y) => {
   return null;
 };
 
+const renderWords = (prev, curr) => {
+  currWordContainer.innerText = `${prev.join(" ")} ${curr}`;
+};
+
 let currentWord = "";
 let previousWords = [];
 const handleCanvasClick = e => {
@@ -132,10 +136,7 @@ const handleCanvasClick = e => {
   const letterClicked = determineLetterClicked(x, y);
   if (letterClicked !== null) {
     currentWord = currentWord + letterClicked;
-    console.log(currentWord);
-    currWordContainer.innerText = `${previousWords.join(" ")} ${
-      currentWord.length > 0 ? currentWord : "???"
-    }`;
+    renderWords(previousWords, currentWord);
   }
 
   if (clicks % 2 == 0) {
@@ -170,10 +171,19 @@ const handleUndoBtnClick = () => {
   linesDrawn.pop();
   drawLetters(puzzle); // redraw letters
   linesDrawn.forEach(drawLine); // redraw line
+
+  // undo the current word
+  if (currentWord === "") {
+    if (previousWords.length > 0) {
+      currentWord = previousWords.pop();
+    }
+  }
+  currentWord = currentWord.substring(0, currentWord.length - 1);
+
+  renderWords(previousWords, currentWord);
 };
 
 const handleWordBtnClick = () => {
-  console.log(currentWord);
   previousWords.push(currentWord);
   currentWord = "";
 };
