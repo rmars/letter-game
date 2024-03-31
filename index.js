@@ -1,8 +1,27 @@
+// Play game elements
 const canvas = document.getElementById("myCanvas");
-const undoBtn = document.getElementById("undo");
-const wordBtn = document.getElementById("word");
+const undoBtn = document.getElementById("undo-btn");
+const wordBtn = document.getElementById("word-btn");
 const currWordContainer = document.getElementById("currentWord");
 const ctx = canvas.getContext("2d");
+
+// Create game elements
+const addWordBtn = document.getElementById("add-word-btn");
+const addWordInput = document.getElementById("add-word-input");
+
+// Create game logic
+const inputRegex = / |,/gi;
+const handleAddWordBtnClick = () => {
+  const sanitizedInput = addWordInput.value.replaceAll(inputRegex, "");
+  console.log(sanitizedInput);
+  let dedupedLetters = {};
+  sanitizedInput.split("").forEach(lett => (dedupedLetters[lett] = true));
+  for (const [key] of Object.entries(dedupedLetters)) {
+    console.log(key);
+  }
+};
+
+// Play game logic
 
 const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
@@ -226,6 +245,10 @@ const handleWordBtnClick = () => {
   redrawGame();
 };
 
+// play game listeners
 canvas.addEventListener("click", handleCanvasClick, false);
 undoBtn.addEventListener("click", handleUndoBtnClick, false);
 wordBtn.addEventListener("click", handleWordBtnClick, false);
+
+// create game listeners
+addWordBtn.addEventListener("click", handleAddWordBtnClick, false);

@@ -14,7 +14,7 @@
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link active"
+          class="nav-link"
           id="play-tab"
           data-bs-toggle="tab"
           data-bs-target="#play"
@@ -27,7 +27,7 @@
       </li>
       <li class="nav-item" role="presentation">
         <button
-          class="nav-link"
+          class="nav-link active"
           id="create-tab"
           data-bs-toggle="tab"
           data-bs-target="#create"
@@ -41,7 +41,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
       <div
-        class="tab-pane fade show active"
+        class="tab-pane fade"
         id="play"
         role="tabpanel"
         aria-labelledby="play-tab">
@@ -57,12 +57,12 @@
 
           <div class="d-flex flex-row">
             <div>
-              <button id="undo" type="button" class="btn btn-warning">
+              <button id="undo-btn" type="button" class="btn btn-warning">
                 Undo
               </button>
             </div>
             <div>
-              <button id="word" type="button" class="btn btn-success">
+              <button id="word-btn" type="button" class="btn btn-success">
                 WORD?!
               </button>
             </div>
@@ -70,11 +70,30 @@
         </div>
       </div>
       <div
-        class="tab-pane fade"
+        class="tab-pane fade show active"
         id="create"
         role="tabpanel"
         aria-labelledby="create-tab">
-        one
+        <div>
+          <div class="input-group mb-3">
+            <input
+              id="add-word-input"
+              type="text"
+              class="form-control"
+              placeholder="Add word(s), separated by spaces or commas"
+              aria-label="Add word(s)"
+              aria-describedby="basic-addon2" />
+
+            <div class="input-group-append">
+              <button
+                id="add-word-btn"
+                class="btn btn-outline-secondary"
+                type="button">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
