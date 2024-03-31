@@ -27,7 +27,7 @@ const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
 const defaultLetterColor = genColorWithOpacity(1);
 // const usedLetterColor = genColorWithOpacity(0.1);
-const usedLetterColor = "red";
+const usedLetterColor = "#ffc107";
 const completedLineDotColor = "green";
 const startLineDotColor = "red";
 
