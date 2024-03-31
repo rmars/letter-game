@@ -7,7 +7,7 @@ const ctx = canvas.getContext("2d");
 const genColorWithOpacity = op => `rgba(40, 167, 69, ${op})`;
 
 const defaultLetterColor = genColorWithOpacity(1);
-// const usedLetterColor = genColorWithOpacity(0.5);
+// const usedLetterColor = genColorWithOpacity(0.1);
 const usedLetterColor = "red";
 const completedLineDotColor = "green";
 const startLineDotColor = "red";
@@ -184,11 +184,14 @@ const drawCircle = (x, y, color) => {
   ctx.fill();
 };
 
-const handleUndoBtnClick = () => {
+const redrawGame = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height); // clear the canvas
-  linesDrawn.pop();
   drawLetters(puzzle); // redraw letters
   linesDrawn.forEach(drawLine); // redraw lines
+};
+
+const handleUndoBtnClick = () => {
+  linesDrawn.pop();
 
   // re-set the start point of the current line
   if (linesDrawn.length > 0) {
@@ -196,15 +199,20 @@ const handleUndoBtnClick = () => {
     fromX = lastLine.toX;
     fromY = lastLine.toY;
   }
+  if (linesDrawn.length === 0) {
+    fromX = null;
+    fromY = null;
+  }
 
   // undo the current word in the display
-  if (currentWord === "") {
+  if (currentWord.length === 1) {
     if (previousWords.length > 0) {
       currentWord = previousWords.pop();
     }
   }
   currentWord = currentWord.substring(0, currentWord.length - 1);
   renderWords(previousWords, currentWord); // wow, I miss react
+  redrawGame();
 };
 
 const handleWordBtnClick = () => {
@@ -215,7 +223,7 @@ const handleWordBtnClick = () => {
   currentWord = currentWord[currentWord.length - 1];
 
   renderWords(previousWords, currentWord); // wow, I miss react
-  drawLetters(puzzle); // redraw letters
+  redrawGame();
 };
 
 canvas.addEventListener("click", handleCanvasClick, false);
