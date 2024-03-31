@@ -15,40 +15,33 @@
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
-          id="create-tab"
-          data-bs-toggle="tab"
-          data-bs-target="#create"
-          type="button"
-          role="tab"
-          aria-controls="create"
-          aria-selected="true">
-          Create game
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
           id="play-tab"
           data-bs-toggle="tab"
           data-bs-target="#play"
           type="button"
           role="tab"
           aria-controls="play"
-          aria-selected="false">
+          aria-selected="true">
           Play
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="create-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#create"
+          type="button"
+          role="tab"
+          aria-controls="create"
+          aria-selected="false">
+          Create game
         </button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
       <div
         class="tab-pane fade show active"
-        id="create"
-        role="tabpanel"
-        aria-labelledby="create-tab">
-        one
-      </div>
-      <div
-        class="tab-pane fade"
         id="play"
         role="tabpanel"
         aria-labelledby="play-tab">
@@ -75,6 +68,13 @@
             </div>
           </div>
         </div>
+      </div>
+      <div
+        class="tab-pane fade"
+        id="create"
+        role="tabpanel"
+        aria-labelledby="create-tab">
+        one
       </div>
     </div>
   </body>
