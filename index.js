@@ -1,25 +1,16 @@
+let puzzle = [
+  ["A", "B", "C"], // top (first row)
+  ["D", "E", "F"], // right (last col)
+  ["G", "H", "I"], // bottom (last row)
+  ["J", "K", "L"], // left (first col)
+];
+
 // Play game elements
 const canvas = document.getElementById("myCanvas");
 const undoBtn = document.getElementById("undo-btn");
 const wordBtn = document.getElementById("word-btn");
 const currWordContainer = document.getElementById("currentWord");
 const ctx = canvas.getContext("2d");
-
-// Create game elements
-const addWordBtn = document.getElementById("add-word-btn");
-const addWordInput = document.getElementById("add-word-input");
-
-// Create game logic
-const inputRegex = / |,/gi;
-const handleAddWordBtnClick = () => {
-  const sanitizedInput = addWordInput.value.replaceAll(inputRegex, "");
-  console.log(sanitizedInput);
-  let dedupedLetters = {};
-  sanitizedInput.split("").forEach(lett => (dedupedLetters[lett] = true));
-  for (const [key] of Object.entries(dedupedLetters)) {
-    console.log(key);
-  }
-};
 
 // Play game logic
 
@@ -30,13 +21,6 @@ const defaultLetterColor = genColorWithOpacity(1);
 const usedLetterColor = "#ffc107";
 const completedLineDotColor = "green";
 const startLineDotColor = "red";
-
-const puzzle = [
-  ["A", "B", "C"], // top (first row)
-  ["D", "E", "F"], // right (last col)
-  ["G", "H", "I"], // bottom (last row)
-  ["J", "K", "L"], // left (first col)
-];
 
 ctx.font = "30px Comic Sans MS";
 ctx.fillStyle = defaultLetterColor;
@@ -250,5 +234,63 @@ canvas.addEventListener("click", handleCanvasClick, false);
 undoBtn.addEventListener("click", handleUndoBtnClick, false);
 wordBtn.addEventListener("click", handleWordBtnClick, false);
 
+// Create game elements
+const addWordBtn = document.getElementById("add-word-btn");
+const addWordInput = document.getElementById("add-word-input");
+
+const topAddWordBtn = document.getElementById("top-add-word-btn");
+const rightAddWordBtn = document.getElementById("right-add-word-btn");
+const bottomAddWordBtn = document.getElementById("bottom-add-word-btn");
+const leftAddWordBtn = document.getElementById("left-add-word-btn");
+
+const topAddWordInput = document.getElementById("top-add-word-input");
+const rightAddWordInput = document.getElementById("right-add-word-input");
+const bottomAddWordInput = document.getElementById("bottom-add-word-input");
+const leftAddWordInput = document.getElementById("left-add-word-input");
+
+// Create game logic
+const inputRegex = / |,/gi;
+const handleAddWordBtnClick = () => {
+  const sanitizedInput = addWordInput.value.replaceAll(inputRegex, "");
+  console.log(sanitizedInput);
+  let dedupedLetters = {};
+  sanitizedInput.split("").forEach(lett => (dedupedLetters[lett] = true));
+  for (const [key] of Object.entries(dedupedLetters)) {
+    console.log(key);
+  }
+};
+
+const processValue = val => {
+  if (val.length < 3) {
+    console.error("invalid input");
+  }
+  return val.split("").map(l => l.toUpperCase());
+};
+
+const addRow = rowNum => {
+  console.log(rowNum);
+  switch (rowNum) {
+    case 0:
+      puzzle[0] = processValue(topAddWordInput.value);
+      break;
+    case 1:
+      puzzle[1] = processValue(rightAddWordInput.value);
+      break;
+    case 2:
+      puzzle[2] = processValue(bottomAddWordInput.value);
+      break;
+    case 3:
+      puzzle[3] = processValue(leftAddWordInput.value);
+      break;
+  }
+  redrawGame();
+};
+
 // create game listeners
-addWordBtn.addEventListener("click", handleAddWordBtnClick, false);
+// TODO: re-enable when adding drag and drop
+// addWordBtn.addEventListener("click", handleAddWordBtnClick, false);
+
+topAddWordBtn.addEventListener("click", () => addRow(0), false);
+rightAddWordBtn.addEventListener("click", () => addRow(1), false);
+bottomAddWordBtn.addEventListener("click", () => addRow(2), false);
+leftAddWordBtn.addEventListener("click", () => addRow(3), false);
