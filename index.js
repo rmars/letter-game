@@ -159,6 +159,13 @@ const handleCanvasClick = e => {
 
   const letterClicked = determineLetterClicked(x, y);
   if (letterClicked === null) {
+    return; // don't process clicks outside of letter spaces
+  }
+  if (
+    currentWord.length > 0 &&
+    letterClicked === currentWord[currentWord.length - 1]
+  ) {
+    console.log("letter ", letterClicked, " was double-clicked");
     return;
   }
 
@@ -219,7 +226,8 @@ const handleUndoBtnClick = () => {
 };
 
 const handleWordBtnClick = () => {
-  if (currentWord.length === 0) {
+  if (currentWord.length < 3) {
+    console.log("current word is too short");
     return;
   }
   previousWords.push(currentWord);
