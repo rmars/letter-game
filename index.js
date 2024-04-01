@@ -5,6 +5,17 @@ let puzzle = [
   ["J", "K", "L"], // left (first col)
 ];
 
+const urlParams = new URLSearchParams(window.location.search);
+
+[0, 1, 2, 3].forEach(i => {
+  const rowFromUrl = urlParams.get(`row-${i}`);
+
+  // TODO: add validation
+  if (!!rowFromUrl) {
+    puzzle[i] = rowFromUrl;
+  }
+});
+
 // Play game elements
 const canvas = document.getElementById("myCanvas");
 const undoBtn = document.getElementById("undo-btn");
@@ -254,27 +265,28 @@ const addWordInputs = [0, 1, 2, 3].map(n =>
 );
 
 // Create game logic
-const inputRegex = / |,/gi;
-const handleAddWordBtnClick = () => {
-  const sanitizedInput = addWordInput.value.replaceAll(inputRegex, "");
-  console.log(sanitizedInput);
-  let dedupedLetters = {};
-  sanitizedInput.split("").forEach(lett => (dedupedLetters[lett] = true));
-  for (const [key] of Object.entries(dedupedLetters)) {
-    console.log(key);
-  }
-};
+
+const searchParams = new URLSearchParams("");
 
 const processValue = val => {
   if (val.length < 3) {
     console.error("invalid input");
+    return null;
   }
   return val.split("").map(l => l.toUpperCase());
 };
 
 const addRow = rowNum => {
-  console.log(rowNum);
-  puzzle[rowNum] = processValue(addWordInputs[rowNum].value);
+  const validatedInput = processValue(addWordInputs[rowNum].value);
+  if (!validatedInput) {
+    return null;
+  }
+
+  puzzle[rowNum] = validatedInput;
+  searchParams.set(`row-${rowNum}`, validatedInput.join(""));
+
+  var newQuery = window.location.pathname + "?" + searchParams.toString();
+  history.pushState(null, "", newQuery);
   redrawGame();
 };
 
