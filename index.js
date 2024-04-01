@@ -246,15 +246,12 @@ wordBtn.addEventListener("click", handleWordBtnClick, false);
 const addWordBtn = document.getElementById("add-word-btn");
 const addWordInput = document.getElementById("add-word-input");
 
-const topAddWordBtn = document.getElementById("top-add-word-btn");
-const rightAddWordBtn = document.getElementById("right-add-word-btn");
-const bottomAddWordBtn = document.getElementById("bottom-add-word-btn");
-const leftAddWordBtn = document.getElementById("left-add-word-btn");
-
-const topAddWordInput = document.getElementById("top-add-word-input");
-const rightAddWordInput = document.getElementById("right-add-word-input");
-const bottomAddWordInput = document.getElementById("bottom-add-word-input");
-const leftAddWordInput = document.getElementById("left-add-word-input");
+const addWordBtns = [0, 1, 2, 3].map(n =>
+  document.getElementById(`add-word-btn-${n}`)
+);
+const addWordInputs = [0, 1, 2, 3].map(n =>
+  document.getElementById(`add-word-input-${n}`)
+);
 
 // Create game logic
 const inputRegex = / |,/gi;
@@ -277,28 +274,10 @@ const processValue = val => {
 
 const addRow = rowNum => {
   console.log(rowNum);
-  switch (rowNum) {
-    case 0:
-      puzzle[0] = processValue(topAddWordInput.value);
-      break;
-    case 1:
-      puzzle[1] = processValue(rightAddWordInput.value);
-      break;
-    case 2:
-      puzzle[2] = processValue(bottomAddWordInput.value);
-      break;
-    case 3:
-      puzzle[3] = processValue(leftAddWordInput.value);
-      break;
-  }
+  puzzle[rowNum] = processValue(addWordInputs[rowNum].value);
   redrawGame();
 };
 
-// create game listeners
-// TODO: re-enable when adding drag and drop
-// addWordBtn.addEventListener("click", handleAddWordBtnClick, false);
-
-topAddWordBtn.addEventListener("click", () => addRow(0), false);
-rightAddWordBtn.addEventListener("click", () => addRow(1), false);
-bottomAddWordBtn.addEventListener("click", () => addRow(2), false);
-leftAddWordBtn.addEventListener("click", () => addRow(3), false);
+addWordBtns.forEach((btn, i) => {
+  btn.addEventListener("click", () => addRow(i), false);
+});
