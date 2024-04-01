@@ -5,16 +5,19 @@ let puzzle = [
   ["J", "K", "L"], // left (first col)
 ];
 
-const urlParams = new URLSearchParams(window.location.search);
+// set game state from URL, if available
+const searchParams = new URLSearchParams(window.location.search);
+if (searchParams.size > 0) {
+  [0, 1, 2, 3].forEach(i => {
+    const rowFromUrl = searchParams.get(`row-${i}`);
 
-[0, 1, 2, 3].forEach(i => {
-  const rowFromUrl = urlParams.get(`row-${i}`);
-
-  // TODO: add validation
-  if (!!rowFromUrl) {
-    puzzle[i] = rowFromUrl;
-  }
-});
+    // TODO: add validation
+    if (!!rowFromUrl) {
+      puzzle[i] = rowFromUrl; // set puzzle rows
+      document.getElementById(`add-word-input-${i}`).value = rowFromUrl;
+    }
+  });
+}
 
 // Play game elements
 const canvas = document.getElementById("myCanvas");
@@ -254,8 +257,6 @@ undoBtn.addEventListener("click", handleUndoBtnClick, false);
 wordBtn.addEventListener("click", handleWordBtnClick, false);
 
 // Create game elements
-const addWordBtn = document.getElementById("add-word-btn");
-const addWordInput = document.getElementById("add-word-input");
 
 const addWordBtns = [0, 1, 2, 3].map(n =>
   document.getElementById(`add-word-btn-${n}`)
@@ -265,8 +266,6 @@ const addWordInputs = [0, 1, 2, 3].map(n =>
 );
 
 // Create game logic
-
-const searchParams = new URLSearchParams("");
 
 const processValue = val => {
   if (val.length < 3) {
