@@ -292,3 +292,17 @@ const addRow = rowNum => {
 addWordBtns.forEach((btn, i) => {
   btn.addEventListener("click", () => addRow(i), false);
 });
+
+const ENTER_KEY = "Enter";
+addWordInputs.forEach((btn, i) => {
+  btn.addEventListener(
+    "keydown",
+    e => {
+      if (e.code != ENTER_KEY) {
+        return;
+      }
+      addRow(i);
+    },
+    false
+  );
+});
