@@ -117,6 +117,9 @@ const drawLine = ({ fromX, fromY, toX, toY }) => {
   drawCircle(toX, toY, completedLineDotColor);
 };
 
+// determineLetterClicked takes an (x, y) coordinate of a click on the canvas,
+// and returns the letter at the coordinate clicked as well as the puzzle row
+// that was clicked
 const determineLetterClicked = (x, y) => {
   const determineYClick = letterOptions => {
     const midYBoundaryHi = cHeight / 2 + padding / 2;
@@ -145,22 +148,22 @@ const determineLetterClicked = (x, y) => {
 
   // first column
   if (x < sideMargin + padding / 2) {
-    return determineYClick(puzzle[3]);
+    return [determineYClick(puzzle[3]), 3];
   }
   // last column
   if (x > cWidth - (sideMargin + padding / 2)) {
-    return determineYClick(puzzle[1]);
+    return [determineYClick(puzzle[1]), 1];
   }
   // first row
   if (y < heightUnit) {
-    return determineXClick(puzzle[0]);
+    return [determineXClick(puzzle[0]), 0];
   }
   // last row
   if (y > 3 * heightUnit) {
-    return determineXClick(puzzle[2]);
+    return [determineXClick(puzzle[2]), 2];
   }
 
-  return null;
+  return [null, null];
 };
 
 const renderWords = (prev, curr) => {
@@ -171,7 +174,8 @@ const handleCanvasClick = e => {
   clicks++;
   const [x, y] = [e.offsetX, e.offsetY];
 
-  const letterClicked = determineLetterClicked(x, y);
+  const [letterClicked, rowClicked] = determineLetterClicked(x, y);
+
   if (letterClicked === null) {
     return; // don't process clicks outside of letter spaces
   }
@@ -179,9 +183,11 @@ const handleCanvasClick = e => {
     currentWord.length > 0 &&
     letterClicked === currentWord[currentWord.length - 1]
   ) {
-    console.log("letter ", letterClicked, " was double-clicked");
+    // don't allow the user to click the same letter twice
     return;
   }
+  // TODO: don't allow the user to click a letter in the same row twice
+  console.log(rowClicked);
 
   currentWord = currentWord + letterClicked;
   renderWords(previousWords, currentWord);
@@ -267,16 +273,19 @@ const addWordInputs = [0, 1, 2, 3].map(n =>
 
 // Create game logic
 
-const processValue = val => {
+const validateRowInput = val => {
   if (val.length < 3) {
     console.error("invalid input");
     return null;
   }
-  return val.split("").map(l => l.toUpperCase());
+  return val
+    .split("")
+    .map(l => l.toUpperCase())
+    .slice(0, 3);
 };
 
 const addRow = rowNum => {
-  const validatedInput = processValue(addWordInputs[rowNum].value);
+  const validatedInput = validateRowInput(addWordInputs[rowNum].value);
   if (!validatedInput) {
     return null;
   }
