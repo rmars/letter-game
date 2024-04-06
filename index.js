@@ -23,7 +23,8 @@ if (searchParams.size > 0) {
 const canvas = document.getElementById("myCanvas");
 const undoBtn = document.getElementById("undo-btn");
 const wordBtn = document.getElementById("word-btn");
-const currWordContainer = document.getElementById("currentWord");
+const currWordContainer = document.getElementById("current-word");
+const prevWordsContainer = document.getElementById("previous-words");
 const ctx = canvas.getContext("2d");
 
 // Play game logic
@@ -34,7 +35,7 @@ const defaultLetterColor = genColorWithOpacity(1);
 // const usedLetterColor = genColorWithOpacity(0.1);
 const usedLetterColor = "#ffc107";
 const completedLineDotColor = "green";
-const startLineDotColor = "red";
+const startLineDotColor = "green";
 
 ctx.font = "30px Comic Sans MS";
 ctx.fillStyle = defaultLetterColor;
@@ -167,7 +168,8 @@ const determineLetterClicked = (x, y) => {
 };
 
 const renderWords = (prev, curr) => {
-  currWordContainer.innerText = `${prev.join(" ")} ${curr}`;
+  currWordContainer.innerText = `${curr}`;
+  prevWordsContainer.innerText = prev.join(" ");
 };
 
 const handleCanvasClick = e => {
